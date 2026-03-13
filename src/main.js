@@ -31,7 +31,7 @@ if (form) {
           "Sorry — something went wrong. Please try again later.";
       }
     } catch (error) {
-      status.textContent = "Network error. Please try again.";
+      status.textContent = "Network error. Please try again later.";
     }
   });
 }
