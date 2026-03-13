@@ -1,0 +1,1079 @@
+<!doctype html>
+<html lang="en" class="light overflow-x-hidden">
+  <head>
+    <meta charset="UTF-8" />
+
+    <title>Raad Oil</title>
+    <meta name="color-scheme" content="light only" />
+    <meta name="supported-color-schemes" content="light" />
+    <meta
+      name="color-scheme"
+      media="(prefers-color-scheme: dark)"
+      content="light"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="theme-color"
+      media="(prefers-color-scheme: light)"
+      content="#ffffff"
+    />
+    <meta
+      name="theme-color"
+      media="(prefers-color-scheme: dark)"
+      content="#ffffff"
+    />
+    <meta
+      name="description"
+      content="Raad Oil crafts premium olive oil with purity and tradition. Discover authentic flavor. | رعد أويل تنتج زيت زيتون عالي الجودة، نقي وأصيل، بطعم لا يُنسى."
+    />
+
+    <!-- Preload critical resources -->
+    <link
+      rel="preload"
+      href="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"
+      as="script"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body class="overflow-x-hidden bg-white text-gray-900">
+    <header
+      x-data="{ mobileMenuOpen: false, scrolled: false, isHome: true }"
+      x-init="
+    isHome = true;
+    window.addEventListener('scroll', () => { scrolled = window.scrollY > 50 });
+  "
+      :class="scrolled || !isHome 
+          ? 'bg-yellow-500 shadow-md text-white' 
+          : 'bg-transparent text-white'"
+      class="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+      @keydown.escape.window="mobileMenuOpen = false"
+    >
+      <div
+        class="w-full flex justify-between items-center px-11 py-6 bg-transparent"
+      >
+        <!-- Logo -->
+        <a href="/index.html" class="flex-shrink-0">
+          <img src="images/Logos/logo.png" alt="Raad Oil Logo" class="h-10" />
+        </a>
+
+        <!-- Desktop Nav -->
+        <nav class="hidden md:flex items-center space-x-6 text-sm font-medium">
+          <a href="/index.html" class="hover:text-yellow-300">Home</a>
+          <a href="/products.html" class="hover:text-yellow-300">Products</a>
+          <a href="/contact.html" class="hover:text-yellow-300">Contact</a>
+          <a href="/catalog.html" class="hover:text-yellow-300">Catalog</a>
+        </nav>
+
+        <!-- Mobile toggle -->
+        <button
+          class="md:hidden focus:outline-none"
+          @click="mobileMenuOpen = !mobileMenuOpen"
+          :aria-expanded="mobileMenuOpen.toString()"
+          aria-controls="mobile-nav"
+          aria-label="Toggle navigation menu"
+        >
+          <!-- Hamburger -->
+          <svg
+            x-show="!mobileMenuOpen"
+            x-cloak
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+          </svg>
+
+          <!-- X (close) -->
+          <svg
+            x-show="mobileMenuOpen"
+            x-cloak
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Mobile Menu -->
+      <div
+        id="mobile-nav"
+        x-show="mobileMenuOpen"
+        x-transition
+        class="md:hidden bg-black/80 px-6 pb-4 space-y-2"
+        @click.outside="mobileMenuOpen = false"
+      >
+        <a
+          href="/index.html"
+          class="block py-2 hover:text-yellow-300"
+          @click="mobileMenuOpen = false"
+          >Home</a
+        >
+        <a
+          href="/products.html"
+          class="block py-2 hover:text-yellow-300"
+          @click="mobileMenuOpen = false"
+          >Products</a
+        >
+        <a
+          href="/contact.html"
+          class="block py-2 hover:text-yellow-300"
+          @click="mobileMenuOpen = false"
+          >Contact</a
+        >
+        <a
+          href="/catalog.html"
+          class="block py-2 hover:text-yellow-300"
+          @click="mobileMenuOpen = false"
+          >Catalog</a
+        >
+      </div>
+    </header>
+    <main class="pt-0 px-0 py-0">
+      <section class="relative h-screen overflow-hidden">
+        <!-- Background image: push focal point to the right on phones -->
+        <img
+          src="images/GeneralImages/heroSection.jpg"
+          alt="Olive background"
+          class="absolute inset-0 w-full h-full object-cover object-[85%_50%] sm:object-center z-0"
+          loading="eager"
+          fetchpriority="high"
+        />
+
+        <!-- Global dark overlay (unchanged) -->
+        <div class="absolute inset-0 bg-black/40 z-10"></div>
+
+        <!-- Mobile-only gradient to separate text from image -->
+        <div
+          class="absolute inset-0 z-10 sm:hidden bg-gradient-to-r from-black/70 via-black/35 to-transparent"
+        ></div>
+
+        <!-- Content -->
+        <div class="relative z-20 flex items-center h-full">
+          <div class="max-w-2xl px-6 md:px-12">
+            <h1
+              class="text-4xl sm:text-4xl md:text-5xl font-bold leading-tight text-white"
+            >
+              <span
+                >Discover the <span class="text-yellow-500">Legacy</span></span
+              ><br />
+              of Raad Olive Oil
+            </h1>
+
+            <svg
+              class="w-40 h-8 mt-4"
+              viewBox="0 0 200 40"
+              fill="none"
+              aria-hidden="true"
+            >
+              <path
+                d="M0,20 C50,0 150,40 200,20"
+                stroke="#FBBF24"
+                stroke-width="6"
+                stroke-linecap="round"
+              />
+            </svg>
+
+            <p class="mt-6 text-white text-lg sm:text-xl leading-relaxed">
+              Taste the richness of Lebanese soil and soul, in every drop,
+              spoon, and spread.
+            </p>
+
+            <a
+              href="/products"
+              class="mt-8 inline-block text-white bg-yellow-500 hover:bg-yellow-600 font-semibold px-8 py-4 rounded-full shadow-lg transition-transform hover:scale-105 focus:outline-none"
+            >
+              Explore Our Products
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <style>
+        /* Optional curved underline animation (not LCP-blocking) */
+        @keyframes drawUnderline {
+          to {
+            stroke-dashoffset: 0;
+          }
+        }
+        .underline-draw {
+          stroke-dasharray: 300;
+          stroke-dashoffset: 300;
+          animation: drawUnderline 1s ease-out 0.4s forwards;
+        }
+      </style>
+
+      <!-- Keep Alpine.js if needed for interactivity -->
+      <script
+        src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"
+        defer
+      ></script>
+
+      <!-- AOS Scroll Animation (optional) -->
+      <!-- ⚠️ Not applied to any LCP element, safe to leave -->
+      <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+      <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+      <script>
+        document.addEventListener("DOMContentLoaded", () => AOS.init());
+      </script>
+
+      <!-- Our Story Section -->
+      <section
+        id="our-story"
+        class="relative overflow-hidden py-32 px-8 lg:px-16 bg-gradient-to-b from-white to-gray-50"
+      >
+        <!-- Subtle Tiled Pattern Background -->
+        <div
+          class="absolute inset-0 bg-[url('/images/pattern-light.svg')] opacity-10 pointer-events-none"
+        ></div>
+
+        <!-- Top-Left Decorative Accent -->
+        <img
+          src="images/DecorativeTopLeft.WebP"
+          alt=""
+          class="absolute top-0 left-0 w-64 md:w-80 opacity-30 pointer-events-none transform -translate-x-8 -translate-y-8 -rotate-12"
+        />
+
+        <div
+          class="relative max-w-8xl mx-auto grid lg:grid-cols-2 gap-16 items-center"
+        >
+          <!-- Left: Hero Image with Hover Scale -->
+          <figure
+            data-aos="fade-right"
+            class="overflow-hidden rounded-3xl shadow-2xl transform transition-transform duration-500 hover:scale-105 hidden md:block"
+          >
+            <img
+              src="images/GeneralImages/ourStory.jpg"
+              alt="Raad Oil Origins"
+              class="w-full h-full object-cover"
+            />
+            <figcaption class="sr-only">
+              Early olive orchard and press
+            </figcaption>
+          </figure>
+
+          <!-- Right: Text Content -->
+          <div data-aos="fade-left" class="space-y-8">
+            <!-- Decorative Separator + Heading -->
+            <div>
+              <span
+                class="block h-1 w-20 bg-yellow-500 rounded-full mb-4"
+              ></span>
+              <h2
+                class="text-4xl lg:text-5xl font-extrabold text-gray-900 tracking-tight"
+              >
+                Our <span class="text-yellow-500">Story</span>
+              </h2>
+            </div>
+
+            <!-- Paragraphs with Drop Cap and Accent Bar -->
+            <div class="prose prose-lg prose-gray relative">
+              <!-- vertical accent bar -->
+
+              <p class="pl-8">
+                In 1966, it all started in a small village in North Lebanon
+                called Daher El Ain Al Koura. Georges
+                <span class="italic font-semibold">RAAD</span> aimed to sell
+                high-quality olive oil and create a trademark by utilizing his
+                “old stone” olive press and orchard. Unfortunately, the civil
+                war halted production and his dream.
+              </p>
+              <p class="pl-8">
+                In 1994, his son, Jean
+                <span class="italic font-semibold">RAAD</span>, revived the
+                vision, modernizing the concept and expanding the brand. From a
+                small food business, Jean grew the company, adding products to
+                the <span class="italic font-semibold">RAAD</span> family and
+                reaching national and international markets.
+              </p>
+              <p class="pl-8">
+                Focused on quality, the company earned the ISO 22000 food safety
+                certificate and upgraded to FSSC 22000 in 2019. Today,
+                <span class="italic font-semibold">RAAD</span> products are
+                recognized globally, shipped to Australia, Ecuador, and
+                Suriname.
+              </p>
+            </div>
+
+            <!-- Open Video Button -->
+            <div
+              data-aos="fade-up"
+              class="mt-8 flex justify-center md:justify-start"
+            >
+              <button
+                id="openVideoBtn"
+                type="button"
+                class="inline-flex items-center px-6 py-3 bg-yellow-500 text-white font-medium rounded-full shadow-xl hover:bg-yellow-600 transition-shadow duration-300"
+              >
+                <svg
+                  class="w-5 h-5 mr-2"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  aria-hidden="true"
+                >
+                  <path d="M4.5 3.5v13l11-6.5-11-6.5z" />
+                </svg>
+                Watch Our Story
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom-Right Decorative Accent -->
+        <img
+          src="images/DecorativeOurStory.WebP"
+          alt=""
+          class="absolute bottom-0 right-0 w-64 md:w-80 opacity-20 pointer-events-none transform translate-x-12 translate-y-12"
+        />
+        <!-- Video Modal -->
+        <div
+          id="videoModal"
+          class="fixed inset-0 z-[999] hidden items-center justify-center"
+          aria-hidden="true"
+        >
+          <!-- Backdrop -->
+          <div id="videoBackdrop" class="absolute inset-0 bg-black/70"></div>
+
+          <!-- Dialog  -->
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="videoTitle"
+            class="relative z-10 mx-4 w-full max-w-4xl rounded-2xl bg-white shadow-2xl overflow-hidden"
+          >
+            <!-- Video wrapper -->
+            <div class="aspect-video w-full bg-black relative">
+              <video
+                id="ourStoryVideo"
+                class="h-full w-full"
+                controls
+                playsinline
+              >
+                <source src="/media/ourstory.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+
+              <!-- Close button -->
+              <button
+                id="closeVideoBtn"
+                type="button"
+                class="absolute right-3 top-3 z-20 inline-flex h-10 w-10 items-center justify-center rounded-full bg-black/70 text-white hover:bg-black focus:outline-none"
+                aria-label="Close video"
+              >
+                ✕
+              </button>
+            </div>
+
+            <h3 id="videoTitle" class="sr-only">Our Story</h3>
+          </div>
+        </div>
+
+        <script>
+          (function () {
+            const openBtn = document.getElementById("openVideoBtn");
+            const modal = document.getElementById("videoModal");
+            const backdrop = document.getElementById("videoBackdrop");
+            const closeBtn = document.getElementById("closeVideoBtn");
+            const video = document.getElementById("ourStoryVideo");
+
+            function openModal() {
+              modal.classList.remove("hidden");
+              modal.classList.add("flex");
+              modal.setAttribute("aria-hidden", "false");
+              try {
+                video.currentTime = 0;
+              } catch (e) {}
+              video.play().catch(() => {});
+              document.body.style.overflow = "hidden";
+            }
+
+            function closeModal() {
+              modal.classList.add("hidden");
+              modal.classList.remove("flex");
+              modal.setAttribute("aria-hidden", "true");
+              video.pause();
+              try {
+                video.currentTime = 0;
+              } catch (e) {}
+              document.body.style.overflow = "";
+            }
+
+            openBtn?.addEventListener("click", openModal);
+            closeBtn?.addEventListener("click", closeModal);
+            backdrop?.addEventListener("click", closeModal);
+            window.addEventListener("keydown", (e) => {
+              if (e.key === "Escape" && !modal.classList.contains("hidden"))
+                closeModal();
+            });
+          })();
+        </script>
+      </section>
+
+      <!--  Partners Section -->
+      <section class="py-24 bg-white relative overflow-hidden">
+        <!-- Decorative Olive Background Accent -->
+        <img
+          src="/images/olive-accent.svg"
+          alt=""
+          class="absolute right-0 top-0 w-72 opacity-10 pointer-events-none hidden md:block"
+        />
+
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div
+            class="mb-16 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-10"
+          >
+            <!-- Left Heading (Title First) -->
+            <div class="lg:w-1/2" data-aos="fade-right">
+              <h2 class="text-4xl font-bold text-gray-900 tracking-tight">
+                Excellence in Every Drop: <br />
+                <span class="text-yellow-500">Why Partners Choose Us</span>
+              </h2>
+            </div>
+
+            <!-- Right Paragraph -->
+            <div class="lg:w-1/2" data-aos="fade-left">
+              <p class="text-lg text-gray-500">
+                From quality assurance to global logistics, our operations are
+                built for <br class="hidden md:block" />
+                performance and trust.
+              </p>
+            </div>
+          </div>
+
+          <!-- Feature Cards -->
+          <div
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+            data-aos="fade-up"
+            data-aos-delay="100"
+          >
+            <!-- Card 1 -->
+            <div
+              class="group bg-gray-100 hover:bg-yellow-500 rounded-2xl p-6 transition-all duration-500 hover:-translate-y-1 hover:shadow-lg"
+              data-aos="fade-up"
+              data-aos-delay="150"
+            >
+              <div
+                class="bg-white ring-1 ring-yellow-400 rounded-full w-14 h-14 flex items-center justify-center mb-5"
+              >
+                <svg width="28" height="28" viewBox="0 0 30 30" fill="none">
+                  <circle
+                    cx="15"
+                    cy="15"
+                    r="10"
+                    stroke="#D6A700"
+                    stroke-width="2"
+                  />
+                  <line
+                    x1="5"
+                    y1="15"
+                    x2="25"
+                    y2="15"
+                    stroke="#D6A700"
+                    stroke-width="2"
+                  />
+                  <path
+                    d="M15 5C18 8 18 22 15 25C12 22 12 8 15 5Z"
+                    stroke="#D6A700"
+                    stroke-width="2"
+                  />
+                </svg>
+              </div>
+              <h4
+                class="text-xl font-semibold text-gray-900 group-hover:text-white"
+              >
+                International Shipping
+              </h4>
+              <p
+                class="text-sm text-gray-500 leading-5 mt-2 group-hover:text-white"
+              >
+                We export high-quality oil products to partners and clients
+                across the globe.
+              </p>
+            </div>
+
+            <!-- Card 2 -->
+            <div
+              class="group bg-gray-100 hover:bg-yellow-500 rounded-2xl p-6 transition-all duration-500 hover:-translate-y-1 hover:shadow-lg"
+              data-aos="fade-up"
+              data-aos-delay="250"
+            >
+              <div
+                class="bg-white ring-1 ring-yellow-400 rounded-full w-14 h-14 flex items-center justify-center mb-5"
+              >
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M3 3H16V16H3V3Z"
+                    stroke="#D6A700"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M16 8H20L23 11V16H16V8Z"
+                    stroke="#D6A700"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <circle cx="5.5" cy="20.5" r="1.5" fill="#D6A700" />
+                  <circle cx="18.5" cy="20.5" r="1.5" fill="#D6A700" />
+                </svg>
+              </div>
+              <h4
+                class="text-xl font-semibold text-gray-900 group-hover:text-white"
+              >
+                Premium Quality
+              </h4>
+              <p
+                class="text-sm text-gray-500 leading-5 mt-2 group-hover:text-white"
+              >
+                Our products meet international standards, ensuring purity,
+                performance, and safety.
+              </p>
+            </div>
+
+            <!-- Card 3 -->
+            <div
+              class="group bg-gray-100 hover:bg-yellow-500 rounded-2xl p-6 transition-all duration-500 hover:-translate-y-1 hover:shadow-lg"
+              data-aos="fade-up"
+              data-aos-delay="350"
+            >
+              <div
+                class="bg-white ring-1 ring-yellow-400 rounded-full w-14 h-14 flex items-center justify-center mb-5"
+              >
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M3 21V9L9 13V9L15 13V9L21 13V21H3Z"
+                    stroke="#D6A700"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M7 21V17"
+                    stroke="#D6A700"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M11 21V17"
+                    stroke="#D6A700"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M15 21V17"
+                    stroke="#D6A700"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+              <h4
+                class="text-xl font-semibold text-gray-900 group-hover:text-white"
+              >
+                Modern Facilities
+              </h4>
+              <p
+                class="text-sm text-gray-500 leading-5 mt-2 group-hover:text-white"
+              >
+                Equipped with advanced refining technology for consistent
+                quality and efficiency.
+              </p>
+            </div>
+
+            <!-- Card 4 -->
+            <div
+              class="group bg-gray-100 hover:bg-yellow-500 rounded-2xl p-6 transition-all duration-500 hover:-translate-y-1 hover:shadow-lg"
+              data-aos="fade-up"
+              data-aos-delay="450"
+            >
+              <div
+                class="bg-white ring-1 ring-yellow-400 rounded-full w-14 h-14 flex items-center justify-center mb-5"
+              >
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="#D6A700"
+                    stroke-width="2"
+                  />
+                  <path
+                    d="M12 6V12L16 14"
+                    stroke="#D6A700"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+              <h4
+                class="text-xl font-semibold text-gray-900 group-hover:text-white"
+              >
+                On-Time Delivery
+              </h4>
+              <p
+                class="text-sm text-gray-500 leading-5 mt-2 group-hover:text-white"
+              >
+                We maintain reliable logistics to ensure timely shipments and
+                customer satisfaction.
+              </p>
+            </div>
+          </div>
+
+          <!-- CTA Button -->
+          <div
+            class="text-center mt-12"
+            data-aos="fade-up"
+            data-aos-delay="500"
+          >
+            <a
+              href="/contact"
+              class="inline-block bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-6 py-3 rounded-full shadow-md transition"
+            >
+              Become a Partner
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Products Section (Aligned with Previous Section Style) -->
+      <section id="products" class="bg-white py-24 px-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <!-- Title and Paragraph Row -->
+          <div
+            class="mb-16 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-10"
+          >
+            <!-- Left: Heading -->
+            <div class="lg:w-1/2" data-aos="fade-right">
+              <h2 class="text-4xl font-extrabold text-gray-900">
+                Our Finest Olive Oil: <br />
+                <span class="text-yellow-500">Crafted with Care</span>
+              </h2>
+            </div>
+            <!-- Right: Description -->
+            <div class="lg:w-1/2" data-aos="fade-left">
+              <p class="text-lg text-gray-500">
+                Discover premium olive oil made from Lebanese olives, harvested
+                with tradition and pressed for purity and taste.
+              </p>
+            </div>
+          </div>
+
+          <!-- Product Grid -->
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
+            data-aos="fade-up"
+            data-aos-delay="100"
+          >
+            <!-- Product Card -->
+            <div
+              class="bg-gray-50 rounded-2xl p-6 text-center shadow-sm hover:shadow-md transition-all"
+              data-aos="fade-up"
+              data-aos-delay="150"
+            >
+              <img
+                src="images/prods/pickledcucumber1.WebP"
+                alt="Extra Virgin"
+                class="w-20 h-28 object-contain mx-auto mb-4"
+              />
+              <h3 class="text-lg font-semibold text-gray-900">
+                Pickled Cucumber
+              </h3>
+              <p class="text-sm text-gray-500 mt-2 mb-4">
+                600 g / 1Kg / 2.8 Kg / 10 Kg
+              </p>
+            </div>
+
+            <!-- Product Card -->
+            <div
+              class="bg-gray-50 rounded-2xl p-6 text-center shadow-sm hover:shadow-md transition-all"
+              data-aos="fade-up"
+              data-aos-delay="250"
+            >
+              <img
+                src="images/prods/pickledgreenolives1.WebP"
+                alt="Organic Oil"
+                class="w-20 h-28 object-contain mx-auto mb-4"
+              />
+              <h3 class="text-lg font-semibold text-gray-900">
+                Pickled Green Olives
+              </h3>
+              <p class="text-sm text-gray-500 mt-2 mb-4">
+                600 g / 1Kg / 2.8 Kg / 10 Kg
+              </p>
+            </div>
+
+            <!-- Product Card -->
+            <div
+              class="bg-gray-50 rounded-2xl p-6 text-center shadow-sm hover:shadow-md transition-all"
+              data-aos="fade-up"
+              data-aos-delay="350"
+            >
+              <img
+                src="images/prods/pickledturnip1.WebP"
+                alt="Garlic Infused"
+                class="w-20 h-28 object-contain mx-auto mb-4"
+              />
+              <h3 class="text-lg font-semibold text-gray-900">
+                Pickled Turnip
+              </h3>
+              <p class="text-sm text-gray-500 mt-2 mb-4">
+                600 g / 1Kg / 2.8 Kg / 10 Kg
+              </p>
+            </div>
+
+            <!-- Product Card -->
+            <div
+              class="bg-gray-50 rounded-2xl p-6 text-center shadow-sm hover:shadow-md transition-all"
+              data-aos="fade-up"
+              data-aos-delay="450"
+            >
+              <img
+                src="images/prods/pickledvineleaves1.WebP"
+                alt="Signature Blend"
+                class="w-20 h-28 object-contain mx-auto mb-4"
+              />
+              <h3 class="text-lg font-semibold text-gray-900">
+                Pickled Vine Leaves
+              </h3>
+              <p class="text-sm text-gray-500 mt-2 mb-4">
+                880 g / 2.3 Kg / 9 Kg
+              </p>
+            </div>
+          </div>
+
+          <!-- CTA Button -->
+          <div
+            class="text-center mt-16"
+            data-aos="fade-up"
+            data-aos-delay="550"
+          >
+            <a
+              href="/products"
+              class="inline-block bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-8 py-3 rounded-full shadow transition"
+            >
+              View All Products
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Certifications Section -->
+      <section
+        id="certifications"
+        class="py-24 bg-white relative overflow-hidden"
+      >
+        <!-- Decorative Olive Background Accent -->
+        <img
+          src="/images/olive-accent.svg"
+          alt=""
+          class="absolute right-0 top-0 w-72 opacity-10 pointer-events-none hidden md:block"
+        />
+
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <!-- Title & Intro Row -->
+          <div
+            class="mb-16 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-10"
+          >
+            <!-- Heading -->
+            <div class="lg:w-1/2" data-aos="fade-right">
+              <h2 class="text-4xl font-extrabold text-gray-900">
+                Our Commitment to Quality:<br />
+                <span class="text-yellow-500">Certifications</span>
+              </h2>
+            </div>
+            <!-- Intro Text -->
+            <div class="lg:w-1/2" data-aos="fade-left">
+              <p class="text-lg text-gray-500">
+                We adhere to the strictest food-safety and quality management
+                standards, validated through internationally recognized
+                certifications.
+              </p>
+            </div>
+          </div>
+
+          <!-- Certification Cards -->
+          <div
+            class="grid grid-cols-1 md:grid-cols-2 gap-6"
+            data-aos="fade-up"
+            data-aos-delay="100"
+          >
+            <!-- ISO 22000 Card -->
+            <div
+              class="group bg-gray-100 hover:bg-yellow-500 rounded-2xl p-6 transition-all duration-500 hover:-translate-y-1 hover:shadow-lg"
+              data-aos="fade-up"
+              data-aos-delay="150"
+            >
+              <div
+                class="bg-white ring-1 ring-yellow-400 rounded-full w-14 h-14 flex items-center justify-center mb-5"
+              >
+                <!-- Replace with your ISO icon -->
+                <svg width="28" height="28" viewBox="0 0 30 30" fill="none">
+                  <text
+                    x="50%"
+                    y="54%"
+                    text-anchor="middle"
+                    font-size=" twelve"
+                    fill="#D6A700"
+                  >
+                    Logo
+                  </text>
+                </svg>
+              </div>
+              <h4
+                class="text-xl font-semibold text-gray-900 group-hover:text-white"
+              >
+                ISO 22000:2018
+              </h4>
+              <p
+                class="text-sm text-gray-500 leading-5 mt-2 group-hover:text-white"
+              >
+                Certified food-safety management system.
+              </p>
+            </div>
+            <!-- FSSC 22000 Card -->
+            <div
+              class="group bg-gray-100 hover:bg-yellow-500 rounded-2xl p-6 transition-all duration-500 hover:-translate-y-1 hover:shadow-lg"
+              data-aos="fade-up"
+              data-aos-delay="250"
+            >
+              <div
+                class="bg-white ring-1 ring-yellow-400 rounded-full w-14 h-14 flex items-center justify-center mb-5"
+              >
+                <!-- Replace with your FSSC icon -->
+                <svg width="28" height="28" viewBox="0 0 30 30" fill="none">
+                  <text
+                    x="50%"
+                    y="54%"
+                    text-anchor="middle"
+                    font-size=" ten"
+                    fill="#D6A700"
+                  >
+                    Logo
+                  </text>
+                </svg>
+              </div>
+              <h4
+                class="text-xl font-semibold text-gray-900 group-hover:text-white"
+              >
+                FSSC 22000
+              </h4>
+              <p
+                class="text-sm text-gray-500 leading-5 mt-2 group-hover:text-white"
+              >
+                Food-safety system certification scheme.
+              </p>
+            </div>
+          </div>
+
+          <!-- Download CTA -->
+          <div
+            class="text-center mt-16"
+            data-aos="fade-up"
+            data-aos-delay="200"
+          >
+            <a
+              href="/downloads/certificates"
+              class="inline-block bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-8 py-3 rounded-full shadow transition"
+            >
+              Download All Certificates
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script
+      src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"
+      defer
+    ></script>
+    <script type="module" src="/src/main.js"></script>
+    <footer class="bg-gray-50 pt-16 pb-8">
+      <div class="max-w-screen-xl mx-auto px-6 md:px-10 lg:px-20 space-y-12">
+        <!-- Top Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
+          <!-- 1. Logo + Description -->
+          <div class="text-center lg:text-left space-y-2">
+            <img
+              src="images/Logos/logo.png"
+              alt="RAAD logo"
+              class="h-10 mx-auto lg:mx-0 hidden md:block"
+            />
+            <p class="text-gray-600 text-sm leading-relaxed">
+              From Lebanon’s olive groves to your table.<br />
+              Crafting quality since 1966.
+            </p>
+          </div>
+
+          <!-- 2. Quick Links -->
+          <div class="text-center md:text-left">
+            <h3 class="text-gray-900 font-semibold mb-4 text-base">
+              Quick Links
+            </h3>
+            <ul class="space-y-2 text-sm text-gray-600">
+              <li>
+                <a
+                  href="/index.html"
+                  class="hover:text-yellow-600 transition-colors"
+                  >Home</a
+                >
+              </li>
+              <li>
+                <a
+                  href="/products.html"
+                  class="hover:text-yellow-600 transition-colors"
+                  >Products</a
+                >
+              </li>
+              <li>
+                <a
+                  href="/contact.html"
+                  class="hover:text-yellow-600 transition-colors"
+                  >Contact Us</a
+                >
+              </li>
+              <li>
+                <a href="#" class="hover:text-yellow-600 transition-colors"
+                  >Catalog</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- 3 & 4. Contact Info -->
+          <div class="md:col-span-2 text-center md:text-left">
+            <h3 class="text-gray-900 font-semibold text-center mb-6 text-base">
+              Contact Information
+            </h3>
+            <div
+              class="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm text-gray-600 leading-relaxed"
+            >
+              <!-- Company 1 -->
+              <div>
+                <strong
+                  class="text-gray-700 uppercase tracking-wide text-xs font-semibold block mb-2"
+                >
+                  Jean Raad For Industries & Trade
+                </strong>
+                Daher El Ain, Koura, North Lebanon<br />
+                T: +961 6 416 716 | +961 6 415 759<br />
+                F: Ext. 18<br />
+                E:
+                <a
+                  href="mailto:jean.raad@raadoil.com"
+                  class="text-yellow-600 hover:underline"
+                >
+                  jean.raad@raadoil.com
+                </a>
+              </div>
+
+              <!-- Company 2 -->
+              <div>
+                <strong
+                  class="text-gray-700 uppercase tracking-wide text-xs font-semibold block mb-2"
+                >
+                  RAAD ENTERPRISES PTY LTD
+                </strong>
+                PO Box 1076 Maroubra NSW 2035<br />
+                Sydney, Australia<br />
+                T: 0418 465 871 | 0412 889 249
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Divider -->
+        <div class="border-t border-gray-200"></div>
+
+        <!-- Bottom: Social + Copyright -->
+        <div class="text-center space-y-4">
+          <!-- Social Icons -->
+          <div class="flex justify-center space-x-4">
+            <a
+              href="https://www.facebook.com/share/1ECNiEaWkZ/"
+              aria-label="Facebook"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="w-9 h-9 flex items-center justify-center rounded-full bg-gray-200 hover:bg-yellow-600 transition group"
+            >
+              <i
+                class="fab fa-facebook-f text-gray-600 group-hover:text-white text-sm"
+              ></i>
+            </a>
+            <a
+              href="https://www.instagram.com/raadoil_lb?igsh=Y2c2N3Rrd29qYXRn"
+              aria-label="Instagram"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="w-9 h-9 flex items-center justify-center rounded-full bg-gray-200 hover:bg-yellow-600 transition group"
+            >
+              <i
+                class="fab fa-instagram text-gray-600 group-hover:text-white text-sm"
+              ></i>
+            </a>
+            <a
+              href="https://www.tiktok.com/@raadoil?_t=ZS-8ykxUvoXfQf&_r=1"
+              aria-label="TikTok"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="w-9 h-9 flex items-center justify-center rounded-full bg-gray-200 hover:bg-yellow-600 transition group"
+            >
+              <i
+                class="fab fa-tiktok text-gray-600 group-hover:text-white text-sm"
+              ></i>
+            </a>
+            <a
+              href="https://maps.app.goo.gl/zpnpHGAjWgrZy3Cx7?g_st=ac"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Location"
+              class="w-9 h-9 flex items-center justify-center rounded-full bg-gray-200 hover:bg-yellow-600 transition group"
+            >
+              <i
+                class="fas fa-map-marker-alt text-gray-600 group-hover:text-white text-sm"
+              ></i>
+            </a>
+          </div>
+          <!-- Copyright -->
+          <p class="text-sm text-gray-500">
+            &copy; 2025 RAAD. All rights reserved.
+          </p>
+          <!-- Developer Credit -->
+          <p class="text-xs text-gray-400">
+            Developed by
+            <a
+              href="https://www.linkedin.com/in/helena-salim-425674275"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-yellow-600 hover:underline"
+            >
+              Helena Salim
+            </a>
+          </p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

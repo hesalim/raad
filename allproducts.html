@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="en" class="light overflow-x-hidden">
+
+<head>
+    <meta charset="UTF-8">
+    
+    <title>Raad Oil</title>
+    <meta name="color-scheme" content="light only">
+    <meta name="supported-color-schemes" content="light">
+    <meta name="color-scheme" media="(prefers-color-scheme: dark)" content="light">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#ffffff">
+    <meta name="description" content="Raad Oil crafts premium olive oil with purity and tradition. Discover authentic flavor. | رعد أويل تنتج زيت زيتون عالي الجودة، نقي وأصيل، بطعم لا يُنسى.">
+
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" as="script">
+    
+    
+  <link rel="stylesheet" href="/src/styles.css">
+</head>
+<body class="overflow-x-hidden bg-white text-gray-900">
+<header 
+  x-data="{ mobileMenuOpen: false, scrolled: false, isHome: false }"
+  x-init="
+    isHome = false;
+    window.addEventListener('scroll', () => { scrolled = window.scrollY > 50 });
+  "
+  :class="scrolled || !isHome 
+          ? 'bg-yellow-500 shadow-md text-white' 
+          : 'bg-transparent text-white'"
+  class="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+  @keydown.escape.window="mobileMenuOpen = false"
+>
+  <div class="w-full flex justify-between items-center px-11 py-6 bg-transparent">
+    <!-- Logo -->
+    <a href="/index.html" class="flex-shrink-0">
+      <img src="https://raadoilimages.s3.eu-north-1.amazonaws.com/logo.png" alt="Raad Oil Logo" class="h-10">
+    </a>
+
+    <!-- Desktop Nav -->
+    <nav class="hidden md:flex items-center space-x-6 text-sm font-medium">
+      <a href="/index.html" class="hover:text-yellow-300">Home</a>
+      <a href="/products.html" class="hover:text-yellow-300">Products</a>
+      <a href="/contact.html" class="hover:text-yellow-300">Contact</a>
+      <a href="/catalog.html" class="hover:text-yellow-300">Catalog</a>
+    </nav>
+
+    <!-- Mobile toggle -->
+    <button
+      class="md:hidden focus:outline-none"
+      @click="mobileMenuOpen = !mobileMenuOpen"
+      :aria-expanded="mobileMenuOpen.toString()"
+      aria-controls="mobile-nav"
+      aria-label="Toggle navigation menu"
+    >
+      <!-- Hamburger -->
+      <svg x-show="!mobileMenuOpen" x-cloak class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+
+      <!-- X (close) -->
+      <svg x-show="mobileMenuOpen" x-cloak class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div
+    id="mobile-nav"
+    x-show="mobileMenuOpen"
+    x-transition
+    class="md:hidden bg-black/80 px-6 pb-4 space-y-2"
+    @click.outside="mobileMenuOpen = false"
+  >
+    <a href="/index.html" class="block py-2 hover:text-yellow-300" @click="mobileMenuOpen = false">Home</a>
+    <a href="/products.html" class="block py-2 hover:text-yellow-300" @click="mobileMenuOpen = false">Products</a>
+    <a href="/contact.html" class="block py-2 hover:text-yellow-300" @click="mobileMenuOpen = false">Contact</a>
+    <a href="/catalog.html" class="block py-2 hover:text-yellow-300" @click="mobileMenuOpen = false">Catalog</a>
+  </div>
+</header>
+<main class="pt-0 px-0 py-0">
+<div class="pt-20 sm:pt-24">
+    <section x-data="productList()" class="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
+          
+      <!-- Heading -->
+      <div class="text-center mb-14 relative z-10">
+        <h2 class="text-4xl font-extrabold text-gray-900 leading-tight">
+          Our <span class="text-yellow-500">Products</span>
+        </h2>
+        <p class="mt-4 text-lg text-gray-600">
+         Everything from extra virgin olive oil to pickles, sweets, and more.
+        </p>
+      </div>
+
+
+
+      
+        <!-- Controls -->
+        <div class="mb-8 grid grid-cols-1 gap-3 sm:grid-cols-3">
+            <input x-model="query" type="text" placeholder="Search products…"
+                   class="w-full rounded-xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400">
+
+            <select x-model="category"
+                    class="w-full rounded-xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400">
+                <option value="all">All categories</option>
+                <template x-for="c in categories" :key="c">
+                    <option :value="c" x-text="c"></option>
+                </template>
+            </select>
+
+            <select x-model="sort"
+                    class="w-full rounded-xl border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400">
+                <option value="az">Sort: A → Z</option>
+                <option value="za">Sort: Z → A</option>
+            </select>
+        </div>
+
+        <!-- Grid -->
+        <div class="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
+            <template x-for="p in filtered" :key="p.id">
+               <div class="bg-gray-50 rounded-2xl p-6 text-center shadow-sm hover:shadow-md transition">
+  <img :src="p.image" :alt="p.name" class="w-20 h-28 object-contain mx-auto mb-4" />
+  <!-- Optional tiny category label; remove if you don't want it -->
+  <p class="text-[10px] font-semibold tracking-wide text-yellow-700 uppercase mb-1" x-text="p.category"></p>
+  <h3 class="text-lg font-semibold text-gray-900" x-text="p.name"></h3>
+  <p class="text-sm text-gray-500 mt-2 mb-4" x-text="p.size"></p>
+  <button
+  @click="openProduct(p)"
+  class="inline-block text-yellow-600 text-sm font-medium border border-yellow-600 rounded-full px-4 py-1.5 hover:bg-yellow-600 hover:text-white transition">
+  Check Product
+</button>
+
+</div>
+
+            </template>
+        </div>
+
+        <!-- Empty state -->
+        <div x-show="filtered.length === 0" class="mt-12 text-center text-gray-600">
+            No products match your filters.
+        </div>
+<!-- Minimal Product Modal (compact) -->
+<div x-show="open" x-transition.opacity style="display:none"
+     class="fixed inset-0 z-50 bg-black/50 flex items-start sm:items-center justify-center p-4"
+     @keydown.escape.window="closeProduct()" @click.self="closeProduct()">
+
+  <div x-show="open" x-transition
+       class="w-full max-w-3xl md:max-w-2xl bg-white rounded-2xl shadow-xl overflow-hidden">
+
+    <!-- Header -->
+<div class="px-4 sm:px-5 py-3 border-b flex items-center justify-between">
+  <h2 class="text-base sm:text-lg font-semibold" x-text="selected?.name"></h2>
+  <button @click="closeProduct()" class="p-2 rounded hover:bg-gray-100">✕</button>
+</div>
+
+    
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 sm:p-5">
+      <!-- Left: gallery (smaller) -->
+      <div>
+        <div class="w-full rounded-xl overflow-hidden bg-gray-50">
+          <img
+            :src="selected?.images?.[activeImgIndex] || selected?.image"
+            :alt="selected?.name"
+            class="mx-auto h-64 md:h-72 object-contain"
+          />
+        </div>
+
+        <!-- smaller thumbs -->
+        <div class="mt-3 grid grid-cols-3 gap-2" x-show="(selected?.images?.length || 0) > 1">
+          <template x-for="(img,i) in (selected?.images || []).slice(0,3)" :key="i">
+            <button @click="activeImgIndex = i"
+                    class="aspect-square rounded-lg overflow-hidden border"
+                    :class="i===activeImgIndex ? 'ring-2 ring-yellow-500 border-transparent' : 'border-gray-200'">
+              <img :src="img" class="h-full w-full object-cover" :alt="`thumb ${i+1}`" />
+            </button>
+          </template>
+        </div>
+      </div>
+
+      <!-- Right: details (tighter text sizes) -->
+      <div class="space-y-4">
+        <div>
+          <h3 class="text-xl font-semibold" x-text="selected?.name"></h3>
+          <p class="text-xs text-gray-500" x-text="selected?.size"></p>
+        </div>
+
+        <div>
+          <h4 class="font-semibold text-sm mb-1">Description</h4>
+          <p class="text-sm text-gray-700 leading-6" x-text="selected?.description || '—'"></p>
+        </div>
+
+        <div>
+          <h4 class="font-semibold text-sm mb-2">Care</h4>
+          <ul class="list-disc pl-5 space-y-1 text-sm text-gray-700">
+            <template x-for="rule in (selected?.care || [])" :key="rule">
+              <li x-text="rule"></li>
+            </template>
+            <li x-show="!selected?.care || selected?.care.length===0" class="text-gray-400">—</li>
+          </ul>
+        </div>
+
+      
+      </div>
+    </div>
+  </div>
+</div>
+
+
+</section>
+</div>
+    <script>
+        function productList() {
+            return {
+                query: '',
+               category: new URLSearchParams(window.location.search).get('category') || 'all',
+// modal state
+open: false,
+selected: null,
+activeImgIndex: 0,
+
+openProduct(p) {
+  // if product has only a single image, make it the gallery
+  if (!p.images || p.images.length === 0) p.images = [p.image];
+  this.selected = p;
+  this.activeImgIndex = 0;
+  this.open = true;
+},
+closeProduct() {
+  this.open = false;
+  this.selected = null;
+},
+
+                sort: 'az',
+                categories: [
+                    'Extra Virgin Olive Oil',
+                    'Olives',
+                    'Pickles',
+                    'Starters',
+                    'Vinegar, Syrup & Molasses',
+                    'Lebanese Specialties',
+                    'Sweets',
+                    'Natural Olive Oil Soap'
+                ],
+                // Replace image paths with your assets and add as many as you want
+                products: [
+                    {  
+                      id: 1, 
+                       name: 'Extra Virgin Olive Oil',
+                       size: '250 ml',  
+                       category: 'Extra Virgin Olive Oil',   
+                       image: '{{ asset("images/prods/oliveoil1.WebP") }}', 
+                      // main card image
+                      // NEW: detail fields
+                       images: [
+                        '{{ asset("images/prods/oliveoil1.WebP") }}',
+                        '{{ asset("images/prods/oliveoil2.WebP") }}',                      
+                      ],
+
+                        description: 'Bright Lebanese-style chili paste made with sun-ripened peppers. Great for marinades, sandwiches, and dips.',
+                        care: [
+                          'Store in a cool, dry place',
+                          'Refrigerate after opening',
+                          'Use a clean spoon to avoid contamination'
+                        ], 
+                        url: '#' 
+                      },
+                    
+
+                    { 
+                      id: 2,  
+                      name: 'Pickled Green Olives', 
+                      size: '600 g',  
+                      category: 'Olives', 
+                       image: '{{ asset("images/prods/pickledgreenolives1.WebP") }}', 
+                      // main card image
+                      // NEW: detail fields
+                       images: [
+                        '{{ asset("images/prods/pickledgreenolives1.WebP") }}',
+                        '{{ asset("images/prods/pickledgreenolives2.WebP") }}',                      
+                      ],
+                      
+                        description: 'Bright Lebanese-style chili paste made with sun-ripened peppers. Great for marinades, sandwiches, and dips.',
+                        care: [
+                          'Store in a cool, dry place',
+                          'Refrigerate after opening',
+                          'Use a clean spoon to avoid contamination'
+                        ], 
+                      url: '#' 
+                    },
+
+                    { 
+                      id: 3,  
+                      name: 'Black Olives Dry', 
+                      size: '600 g',  
+                      category: 'Olives', 
+                       image: '{{ asset("images/prods/blackolivesdry1.WebP") }}', 
+                      // main card image
+                      // NEW: detail fields
+                       images: [
+                        '{{ asset("images/prods/blackolivesdry1.WebP") }}',
+                        '{{ asset("images/prods/blackolivesdry2.WebP") }}',                      
+                      ],
+                      
+                        description: 'Bright Lebanese-style chili paste made with sun-ripened peppers. Great for marinades, sandwiches, and dips.',
+                        care: [
+                          'Store in a cool, dry place',
+                          'Refrigerate after opening',
+                          'Use a clean spoon to avoid contamination'
+                        ], 
+                      url: '#' 
+                    },
+
+                    {
+                       id: 4,  
+                      name: 'Pickled Olives Stuffed With Pepper', 
+                      size: '500 ml', 
+                      category: 'Olives', 
+                      image: '{{ asset("images/prods/pickledolivespepper1.WebP") }}', 
+                      // main card image
+                      // NEW: detail fields
+                       images: [
+                        '{{ asset("images/prods/pickledolivespepper1.WebP") }}',
+                        '{{ asset("images/prods/pickledolivespepper2.WebP") }}',                      
+                      ],
+                      
+                        description: 'Bright Lebanese-style chili paste made with sun-ripened peppers. Great for marinades, sandwiches, and dips.',
+                        care: [
+                          'Store in a cool, dry place',
+                          'Refrigerate after opening',
+                          'Use a clean spoon to avoid contamination'
+                        ], 
+                      url: '#' 
+                    },
+
+                    {
+                       id: 5,  
+                      name: 'Pickled Sliced Black Olives', 
+                      size: '1 L', 
+                      category: 'Olives', 
+                       image: '{{ asset("images/prods/pickledslicedblackolives1.WebP") }}', 
+                      // main card image
+                      // NEW: detail fields
+                       images: [
+                        '{{ asset("images/prods/pickledslicedblackolives1.WebP") }}',
+                        '{{ asset("images/prods/pickledslicedblackolives2.WebP") }}',                      
+                      ],
+                      
+                        description: 'Bright Lebanese-style chili paste made with sun-ripened peppers. Great for marinades, sandwiches, and dips.',
+                        care: [
+                          'Store in a cool, dry place',
+                          'Refrigerate after opening',
+                          'Use a clean spoon to avoid contamination'
+                        ], 
+                      url: '#' 
+                    },
+                      
+                    {
+                       id: 6,  
+                      name: 'Pickled Sliced Green Olives', 
+                      size: '1 L', 
+                      category: 'Olives', 
+                       image: '{{ asset("images/prods/slicedgreenolives1.WebP") }}', 
+                      // main card image
+                      // NEW: detail fields
+                       images: [
+                        '{{ asset("images/prods/slicedgreenolives1.WebP") }}',
+                        '{{ asset("images/prods/slicedgreenolives2.WebP") }}',                      
+                      ],
+                      
+                        description: 'Bright Lebanese-style chili paste made with sun-ripened peppers. Great for marinades, sandwiches, and dips.',
+                        care: [
+                          'Store in a cool, dry place',
+                          'Refrigerate after opening',
+                          'Use a clean spoon to avoid contamination'
+                        ],  
+                      url: '#' 
+                    },
+                    
+                    {
+                       id: 7,  
+                      name: 'Pickled Cucumber', 
+                      size: '720 g',
+                      category: 'Pickles', 
+                       image: '{{ asset("images/prods/pickledcucumber1.WebP") }}', 
+                      // main card image
+                      // NEW: detail fields
+                       images: [
+                        '{{ asset("images/prods/pickledcucumber1.WebP") }}',
+                        '{{ asset("images/prods/pickledcucumber2.WebP") }}',                      
+                      ],
+                      
+                        description: 'Bright Lebanese-style chili paste made with sun-ripened peppers. Great for marinades, sandwiches, and dips.',
+                        care: [
+                          'Store in a cool, dry place',
+                          'Refrigerate after opening',
+                          'Use a clean spoon to avoid contamination'
+                        ],  
+                      url: '#' 
+                    },
+
+                    {
+                       id: 8,  
+                      name: 'Pickled Mekti',  
+                      size: '720 g',  
+                      category: 'Pickles', 
+                       image: '{{ asset("images/prods/pickledmekti1.WebP") }}', 
+                      // main card image
+                      // NEW: detail fields
+                       images: [
+                        '{{ asset("images/prods/pickledmekti1.WebP") }}',
+                        '{{ asset("images/prods/pickledmekti2.WebP") }}',                      
+                      ],
+                      
+                        description: 'Bright Lebanese-style chili paste made with sun-ripened peppers. Great for marinades, sandwiches, and dips.',
+                        care: [
+                          'Store in a cool, dry place',
+                          'Refrigerate after opening',
+                          'Use a clean spoon to avoid contamination'
+                        ], 
+                      url: '#' 
+                    },
+
+                    {
+                       id: 9,  
+                      name: 'Pickled Vine Leaves', 
+                      size: '720 g',
+                      category: 'Pickles', 
+                       image: '{{ asset("images/prods/pickledvineleaves1.WebP") }}', 
+                      // main card image
+                      // NEW: detail fields
+                       images: [
+                        '{{ asset("images/prods/pickledvineleaves1.WebP") }}',
+                        '{{ asset("images/prods/pickledvineleaves2.WebP") }}',                      
+                      ],
+                      
+                        description: 'Bright Lebanese-style chili paste made with sun-ripened peppers. Great for marinades, sandwiches, and dips.',
+                        care: [
+                          'Store in a cool, dry place',
+                          'Refrigerate after opening',
+                          'Use a clean spoon to avoid contamination'
+                        ],  
+                      url: '#' 
+                    },
+
+                    {
+                       id: 10,  
+                      name: 'Pressed Vine Leaves', 
+                      size: '720 g',
+                      category: 'Pickles', 
+                       image: '{{ asset("images/prods/pressedvineleaves1.WebP") }}', 
+                      // main card image
+                      // NEW: detail fields
+                       images: [
+                        '{{ asset("images/prods/pressedvineleaves1.WebP") }}',
+                        '{{ asset("images/prods/pressedvineleaves2.WebP") }}',                      
+                      ],
+                      
+                        description: 'Bright Lebanese-style chili paste made with sun-ripened peppers. Great for marinades, sandwiches, and dips.',
+                        care: [
+                          'Store in a cool, dry place',
+                          'Refrigerate after opening',
+                          'Use a clean spoon to avoid contamination'
+                        ],  
+                      url: '#' 
+                    },
+
+                    {
+                       id: 11,  
+                      name: 'Pickled Hot Green Pepper', 
+                      size: '720 g',  
+                      category: 'Pickles', 
+                      image: '{{ asset("images/prods/pickledhotpepper1.WebP") }}', 
+                      // main card image
+                      // NEW: detail fields
+                       images: [
+                        '{{ asset("images/prods/pickledhotpepper1.WebP") }}',
+                        '{{ asset("images/prods/pickledhotpepper2.WebP") }}',                      
+                      ],
+                      
+                        description: 'Bright Lebanese-style chili paste made with sun-ripened peppers. Great for marinades, sandwiches, and dips.',
+                        care: [
+                          'Store in a cool, dry place',
+                          'Refrigerate after opening',
+                          'Use a clean spoon to avoid contamination'
+                        ],  
+                      url: '#' 
+                    },
+
+                    {
+                       id: 12,  
+                      name: 'Pickled Turnip', 
+                      size: '720 g',
+                      category: 'Pickles', 
+                      image: '{{ asset("images/prods/pickledturnip1.WebP") }}', 
+                      // main card image
+                      // NEW: detail fields
+                       images: [
+                        '{{ asset("images/prods/pickledturnip1.WebP") }}',
+                        '{{ asset("images/prods/pickledturnip2.WebP") }}',                      
+                      ],
+                      
+                        description: 'Bright Lebanese-style chili paste made with sun-ripened peppers. Great for marinades, sandwiches, and dips.',
+                        care: [
+                          'Store in a cool, dry place',
+                          'Refrigerate after opening',
+                          'Use a clean spoon to avoid contamination'
+                        ],  
+                      url: '#' 
+                    },
+                    
+                    {
+                       id: 13,  
+                      name: 'Mixed Pickles', 
+                      size: '600 g', 
+                      category: 'Starters', 
+                      image: '{{ asset("images/prods/mixedpickles1.WebP") }}', 
+                      // main card image
+                      // NEW: detail fields
+                       images: [
+                        '{{ asset("images/prods/mixedpickles1.WebP") }}',
+                        '{{ asset("images/prods/mixedpickles2.WebP") }}',                      
+                      ],
+                      
+                        description: 'Bright Lebanese-style chili paste made with sun-ripened peppers. Great for marinades, sandwiches, and dips.',
+                        care: [
+                          'Store in a cool, dry place',
+                          'Refrigerate after opening',
+                          'Use a clean spoon to avoid contamination'
+                        ],  
+                      url: '#' 
+                    },
+
+                    {
+                       id: 14,  
+                      name: 'Cornichon', 
+                      size: '600 g', 
+                      category: 'Starters', 
+                       image: '{{ asset("images/prods/cornichon1.WebP") }}', 
+                      // main card image
+                      // NEW: detail fields
+                       images: [
+                        '{{ asset("images/prods/cornichon1.WebP") }}',
+                        '{{ asset("images/prods/cornichon2.WebP") }}',                      
+                      ],
+                      
+                        description: 'Bright Lebanese-style chili paste made with sun-ripened peppers. Great for marinades, sandwiches, and dips.',
+                        care: [
+                          'Store in a cool, dry place',
+                          'Refrigerate after opening',
+                          'Use a clean spoon to avoid contamination'
+                        ],  
+                      url: '#' 
+                    },
+
+                    {
+                       id: 15,  
+                      name: 'Pickled Cabbage', 
+                      size: '600 g', 
+                      category: 'Starters', 
+                       image: '{{ asset("images/prods/pickledcabbage1.WebP") }}', 
+                      // main card image
+                      // NEW: detail fields
+                       images: [
+                        '{{ asset("images/prods/pickledcabbage1.WebP") }}',
+                        '{{ asset("images/prods/pickledcabbage2.WebP") }}',                      
+                      ],
+                      
+                        description: 'Bright Lebanese-style chili paste made with sun-ripened peppers. Great for marinades, sandwiches, and dips.',
+                        care: [
+                          'Store in a cool, dry place',
+                          'Refrigerate after opening',
+                          'Use a clean spoon to avoid contamination'
+                        ], 
+                      url: '#' 
+                    },
+
+                    {
+                       id: 16,  
+                      name: 'Eggplant Makdous', 
+                      size: '600 g', 
+                      category: 'Starters', 
+                      image: '{{ asset("images/prods/eggplantmakdous1.WebP") }}', 
+                      // main card image
+                      // NEW: detail fields
+                       images: [
+                        '{{ asset("images/prods/eggplantmakdous1.WebP") }}',
+                        '{{ asset("images/prods/eggplantmakdous2.WebP") }}',                      
+                      ],
+                      
+                        description: 'Bright Lebanese-style chili paste made with sun-ripened peppers. Great for marinades, sandwiches, and dips.',
+                        care: [
+                          'Store in a cool, dry place',
+                          'Refrigerate after opening',
+                          'Use a clean spoon to avoid contamination'
+                        ], 
+                      url: '#' 
+                    },
+
+                    {
+                       id: 17,  
+                      name: 'Lupin Beans', 
+                      size: '600 g', 
+                      category: 'Starters', 
+                       image: '{{ asset("images/prods/lupinbeans1.WebP") }}', 
+                      // main card image
+                      // NEW: detail fields
+                       images: [
+                        '{{ asset("images/prods/lupinbeans1.WebP") }}',
+                        '{{ asset("images/prods/lupinbeans2.WebP") }}',                      
+                      ],
+                      
+                        description: 'Bright Lebanese-style chili paste made with sun-ripened peppers. Great for marinades, sandwiches, and dips.',
+                        care: [
+                          'Store in a cool, dry place',
+                          'Refrigerate after opening',
+                          'Use a clean spoon to avoid contamination'
+                        ],  
+                      url: '#' 
+                    },
+
+                    {
+                       id: 18,  
+                      name: 'Promegranate Molasses', 
+                      size: '1 L',
+                      category: 'Vinegar, Syrup & Molasses', 
+                       image: '{{ asset("images/prods/promegranatemolasses1.WebP") }}', 
+                      // main card image
+                      // NEW: detail fields
+                       images: [
+                        '{{ asset("images/prods/promegranatemolasses1.WebP") }}',
+                        '{{ asset("images/prods/promegranatemolasses2.WebP") }}',                      
+                      ],
+                      
+                        description: 'Bright Lebanese-style chili paste made with sun-ripened peppers. Great for marinades, sandwiches, and dips.',
+                        care: [
+                          'Store in a cool, dry place',
+                          'Refrigerate after opening',
+                          'Use a clean spoon to avoid contamination'
+                        ],  
+                      url: '#' 
+                    },
+
+                    {
+                       id: 19, 
+                      name: 'Lemon Juice Substitute', 
+                      size: '400 g',
+                      category: 'Vinegar, Syrup & Molasses', 
+                       image: '{{ asset("images/prods/lemonjuice1.WebP") }}', 
+                      // main card image
+                      // NEW: detail fields
+                       images: [
+                        '{{ asset("images/prods/lemonjuice1.WebP") }}',
+                        '{{ asset("images/prods/lemonjuice2.WebP") }}',                      
+                      ],
+                      
+                        description: 'Bright Lebanese-style chili paste made with sun-ripened peppers. Great for marinades, sandwiches, and dips.',
+                        care: [
+                          'Store in a cool, dry place',
+                          'Refrigerate after opening',
+                          'Use a clean spoon to avoid contamination'
+                        ],  
+                      url: '#' 
+                    },
+
+                    {
+                       id: 20, 
+                      name: 'Mulberry Syrup', 
+                      size: '400 g',
+                      category: 'Vinegar, Syrup & Molasses', 
+                      image: '{{ asset("images/prods/mulberrysyrup1.WebP") }}', 
+                      // main card image
+                      // NEW: detail fields
+                       images: [
+                        '{{ asset("images/prods/mulberrysyrup1.WebP") }}',
+                        '{{ asset("images/prods/mulberrysyrup2.WebP") }}',                      
+                      ],
+                      
+                        description: 'Bright Lebanese-style chili paste made with sun-ripened peppers. Great for marinades, sandwiches, and dips.',
+                        care: [
+                          'Store in a cool, dry place',
+                          'Refrigerate after opening',
+                          'Use a clean spoon to avoid contamination'
+                        ],  
+                      url: '#' 
+                    },
+
+                    {
+                       id: 21, 
+                      name: 'Red Vinegar', 
+                      size: '400 g',
+                      category: 'Vinegar, Syrup & Molasses', 
+                       image: '{{ asset("images/prods/redvinegar1.WebP") }}', 
+                      // main card image
+                      // NEW: detail fields
+                       images: [
+                        '{{ asset("images/prods/redvinegar1.WebP") }}',
+                        '{{ asset("images/prods/redvinegar2.WebP") }}',                      
+                      ],
+                      
+                        description: 'Bright Lebanese-style chili paste made with sun-ripened peppers. Great for marinades, sandwiches, and dips.',
+                        care: [
+                          'Store in a cool, dry place',
+                          'Refrigerate after opening',
+                          'Use a clean spoon to avoid contamination'
+                        ],  
+                      url: '#' 
+                    },
+
+                    {
+                       id: 22, 
+                      name: 'White Vinegar', 
+                      size: '400 g',
+                      category: 'Vinegar, Syrup & Molasses', 
+                       image: '{{ asset("images/prods/whitevinegar1.WebP") }}', 
+                      // main card image
+                      // NEW: detail fields
+                       images: [
+                        '{{ asset("images/prods/whitevinegar1.WebP") }}',
+                        '{{ asset("images/prods/whitevinegar2.WebP") }}',                      
+                      ],
+                      
+                        description: 'Bright Lebanese-style chili paste made with sun-ripened peppers. Great for marinades, sandwiches, and dips.',
+                        care: [
+                          'Store in a cool, dry place',
+                          'Refrigerate after opening',
+                          'Use a clean spoon to avoid contamination'
+                        ],  
+                      url: '#' 
+                    },
+
+                    {
+                       id: 23, 
+                      name: 'Rose', 
+                      size: '400 g',
+                      category: 'Vinegar, Syrup & Molasses', 
+                       image: '{{ asset("images/prods/rose1.WebP") }}', 
+                      // main card image
+                      // NEW: detail fields
+                       images: [
+                        '{{ asset("images/prods/rose1.WebP") }}',
+                        '{{ asset("images/prods/rose2.WebP") }}',                      
+                      ],
+                      
+                        description: 'Bright Lebanese-style chili paste made with sun-ripened peppers. Great for marinades, sandwiches, and dips.',
+                        care: [
+                          'Store in a cool, dry place',
+                          'Refrigerate after opening',
+                          'Use a clean spoon to avoid contamination'
+                        ], 
+                      url: '#' 
+                    },
+
+                    {
+                       id: 24, 
+                      name: 'Jallab Syrup', 
+                      size: '400 g',
+                      category: 'Vinegar, Syrup & Molasses', 
+                       image: '{{ asset("images/prods/jallabsyrup1.WebP") }}', 
+                      // main card image
+                      // NEW: detail fields
+                       images: [
+                        '{{ asset("images/prods/jallabsyrup1.WebP") }}',
+                        '{{ asset("images/prods/jallabsyrup2.WebP") }}',                      
+                      ],
+                      
+                        description: 'Bright Lebanese-style chili paste made with sun-ripened peppers. Great for marinades, sandwiches, and dips.',
+                        care: [
+                          'Store in a cool, dry place',
+                          'Refrigerate after opening',
+                          'Use a clean spoon to avoid contamination'
+                        ],  
+                      url: '#' 
+                    },
+
+                    {
+                       id: 25, 
+                      name: 'Apple Vinegar', 
+                      size: '400 g',
+                      category: 'Vinegar, Syrup & Molasses', 
+                       image: '{{ asset("images/prods/applevinegar1.WebP") }}', 
+                      // main card image
+                      // NEW: detail fields
+                       images: [
+                        '{{ asset("images/prods/applevinegar1.WebP") }}',
+                        '{{ asset("images/prods/applevinegar2.WebP") }}',                      
+                      ],
+                      
+                        description: 'Bright Lebanese-style chili paste made with sun-ripened peppers. Great for marinades, sandwiches, and dips.',
+                        care: [
+                          'Store in a cool, dry place',
+                          'Refrigerate after opening',
+                          'Use a clean spoon to avoid contamination'
+                        ],  
+                      url: '#' 
+                    },
+
+
+                    {
+                      id: 26,
+                      name: 'Chili Paste',
+                      size: '350 ml',
+                      category: 'Lebanese Specialties',
+                      image: '{{ asset("images/products/ChiliPaste.WebP") }}', // main card image
+                      // NEW: detail fields
+                      images: [
+                        '{{ asset("images/products/ChiliPaste2.jpg") }}',
+                        '{{ asset("images/products/ChiliPaste-2.WebP") }}',
+                        
+                      ],
+                      description: 'Bright Lebanese-style chili paste made with sun-ripened peppers. Great for marinades, sandwiches, and dips.',
+                      care: [
+                        'Store in a cool, dry place',
+                        'Refrigerate after opening',
+                        'Use a clean spoon to avoid contamination'
+                      ],
+                      url: '#'
+                    },
+
+                    {
+                       id: 27, 
+                       name: 'Tahina', 
+                       size: '350 ml', 
+                       category: 'Lebanese Specialties', 
+                       image: '{{ asset("images/prods/tahina1.WebP") }}', 
+                      // main card image
+                      // NEW: detail fields
+                       images: [
+                        '{{ asset("images/prods/tahina1.WebP") }}',
+                        '{{ asset("images/prods/tahina2.WebP") }}',                      
+                      ],
+                      
+                        description: 'Bright Lebanese-style chili paste made with sun-ripened peppers. Great for marinades, sandwiches, and dips.',
+                        care: [
+                          'Store in a cool, dry place',
+                          'Refrigerate after opening',
+                          'Use a clean spoon to avoid contamination'
+                        ], 
+                       url: '#' 
+                      },
+
+                    { 
+                      id: 28, 
+                      name: 'Dried Moghrabieh', 
+                      size: '350 ml', 
+                      category: 'Lebanese Specialties', 
+                       image: '{{ asset("images/prods/driedmoghrabieh2.WebP") }}', 
+                      // main card image
+                      // NEW: detail fields
+                       images: [
+                        '{{ asset("images/prods/driedmoghrabieh2.WebP") }}',
+                        '{{ asset("images/prods/driedmoghrabieh1.WebP") }}',                      
+                      ],
+                      
+                        description: 'Bright Lebanese-style chili paste made with sun-ripened peppers. Great for marinades, sandwiches, and dips.',
+                        care: [
+                          'Store in a cool, dry place',
+                          'Refrigerate after opening',
+                          'Use a clean spoon to avoid contamination'
+                        ],  
+                      url: '#' 
+                    },
+
+                    { 
+                      id: 29, 
+                      name: 'Whole Fig Jam', 
+                      size: '1 L',  
+                      category: 'Sweets', 
+                       image: '{{ asset("images/prods/wholefigjam1.WebP") }}', 
+                      // main card image
+                      // NEW: detail fields
+                       images: [
+                        '{{ asset("images/prods/wholefigjam1.WebP") }}',
+                        '{{ asset("images/prods/wholefigjam2.WebP") }}',                      
+                      ],
+                      
+                        description: 'Bright Lebanese-style chili paste made with sun-ripened peppers. Great for marinades, sandwiches, and dips.',
+                        care: [
+                          'Store in a cool, dry place',
+                          'Refrigerate after opening',
+                          'Use a clean spoon to avoid contamination'
+                        ],  
+                      url: '#' 
+                    },
+
+                    { 
+                      id: 30, 
+                      name: 'Fig Jam', 
+                      size: '1 L',  
+                      category: 'Sweets', 
+                      image: '{{ asset("images/prods/figjam1.WebP") }}', 
+                      // main card image
+                      // NEW: detail fields
+                       images: [
+                        '{{ asset("images/prods/figjam1.WebP") }}',
+                        '{{ asset("images/prods/figjam2.WebP") }}',                      
+                      ],
+                      
+                        description: 'Bright Lebanese-style chili paste made with sun-ripened peppers. Great for marinades, sandwiches, and dips.',
+                        care: [
+                          'Store in a cool, dry place',
+                          'Refrigerate after opening',
+                          'Use a clean spoon to avoid contamination'
+                        ],  
+                      url: '#' 
+                    },
+
+                    { 
+                      id: 31, 
+                      name: 'Apricot Jam',  
+                      size: '1 L',  
+                      category: 'Sweets', 
+                      image: '{{ asset("images/prods/apricotjam1.WebP") }}', 
+                      // main card image
+                      // NEW: detail fields
+                       images: [
+                        '{{ asset("images/prods/apricotjam1.WebP") }}',
+                        '{{ asset("images/prods/apricotjam2.WebP") }}',                      
+                      ],
+                      
+                        description: 'Bright Lebanese-style chili paste made with sun-ripened peppers. Great for marinades, sandwiches, and dips.',
+                        care: [
+                          'Store in a cool, dry place',
+                          'Refrigerate after opening',
+                          'Use a clean spoon to avoid contamination'
+                        ],  
+                      url: '#' 
+                    },
+
+                    { 
+                      id: 32, 
+                      name: 'Carob Molasses', 
+                      size: '1 L',  
+                      category: 'Sweets', 
+                       image: '{{ asset("images/prods/carobmolasses1.WebP") }}', 
+                      // main card image
+                      // NEW: detail fields
+                       images: [
+                        '{{ asset("images/prods/carobmolasses1.WebP") }}',
+                        '{{ asset("images/prods/carobmolasses2.WebP") }}',                      
+                      ],
+                      
+                        description: 'Bright Lebanese-style chili paste made with sun-ripened peppers. Great for marinades, sandwiches, and dips.',
+                        care: [
+                          'Store in a cool, dry place',
+                          'Refrigerate after opening',
+                          'Use a clean spoon to avoid contamination'
+                        ],  
+                      url: '#' 
+                    },
+
+                    { 
+                      id: 33, 
+                      name: 'Orange Blossom Water', 
+                      size: '1 L',  
+                      category: 'Sweets', 
+                       image: '{{ asset("images/prods/orangeblossomwater1.WebP") }}', 
+                      // main card image
+                      // NEW: detail fields
+                       images: [
+                        '{{ asset("images/prods/orangeblossomwater1.WebP") }}',
+                        '{{ asset("images/prods/orangeblossomwater2.WebP") }}',                      
+                      ],
+                      
+                        description: 'Bright Lebanese-style chili paste made with sun-ripened peppers. Great for marinades, sandwiches, and dips.',
+                        care: [
+                          'Store in a cool, dry place',
+                          'Refrigerate after opening',
+                          'Use a clean spoon to avoid contamination'
+                        ],  
+                      url: '#' 
+                    },
+
+                    { 
+                      id: 34, 
+                      name: 'Rose Water', 
+                      size: '1 L',  
+                      category: 'Sweets', 
+                      image: '{{ asset("images/prods/rosewater1.WebP") }}', 
+                      // main card image
+                      // NEW: detail fields
+                       images: [
+                        '{{ asset("images/prods/rosewater1.WebP") }}',
+                        '{{ asset("images/prods/rosewater2.WebP") }}',                      
+                      ],
+                      
+                        description: 'Bright Lebanese-style chili paste made with sun-ripened peppers. Great for marinades, sandwiches, and dips.',
+                        care: [
+                          'Store in a cool, dry place',
+                          'Refrigerate after opening',
+                          'Use a clean spoon to avoid contamination'
+                        ],  
+                      url: '#'
+                    },
+
+
+                    { 
+                      id: 35, 
+                      name: 'Natural Olive Oil Soap',  
+                      size: '150 g', 
+                      category: 'Natural Olive Oil Soap', 
+                      image: '{{ asset("images/prods/oliveoilsoap1.WebP") }}', 
+                      // main card image
+                      // NEW: detail fields
+                       images: [
+                        '{{ asset("images/prods/oliveoilsoap1.WebP") }}',
+                        '{{ asset("images/prods/oliveoilsoap2.WebP") }}',                      
+                      ],
+                      
+                        description: 'Bright Lebanese-style chili paste made with sun-ripened peppers. Great for marinades, sandwiches, and dips.',
+                        care: [
+                          'Store in a cool, dry place',
+                          'Refrigerate after opening',
+                          'Use a clean spoon to avoid contamination'
+                        ], 
+                      url: '#' 
+                    },
+                    {
+                       id: 36,  
+                      name: 'Pickled Cornichon', 
+                      size: '600 g', 
+                      category: 'Starters', 
+                       image: '{{ asset("images/prods/pickledcornichon1.WebP") }}', 
+                      // main card image
+                      // NEW: detail fields
+                       images: [
+                        '{{ asset("images/prods/pickledcornichon1.WebP") }}',
+                        '{{ asset("images/prods/pickledcornichon2.WebP") }}',                      
+                      ],
+                      
+                        description: 'Bright Lebanese-style chili paste made with sun-ripened peppers. Great for marinades, sandwiches, and dips.',
+                        care: [
+                          'Store in a cool, dry place',
+                          'Refrigerate after opening',
+                          'Use a clean spoon to avoid contamination'
+                        ],  
+                      url: '#' 
+                    },
+
+                    {
+                       id: 37,  
+                      name: 'Pickled Black Olives', 
+                      size: '600 g', 
+                      category: 'Olives', 
+                       image: '{{ asset("images/prods/pickledblackolives1.WebP") }}', 
+                      // main card image
+                      // NEW: detail fields
+                       images: [
+                        '{{ asset("images/prods/pickledblackolives1.WebP") }}',
+                        '{{ asset("images/prods/pickledblackolives2.WebP") }}',                      
+                      ],
+                      
+                        description: 'Bright Lebanese-style chili paste made with sun-ripened peppers. Great for marinades, sandwiches, and dips.',
+                        care: [
+                          'Store in a cool, dry place',
+                          'Refrigerate after opening',
+                          'Use a clean spoon to avoid contamination'
+                        ],  
+                      url: '#' 
+                    },
+
+                    {
+                       id: 38,  
+                      name: 'Pickled Olives with Thyme', 
+                      size: '600 g', 
+                      category: 'Olives', 
+                       image: '{{ asset("images/prods/pickledolivesthyme1.WebP") }}', 
+                      // main card image
+                      // NEW: detail fields
+                       images: [
+                        '{{ asset("images/prods/pickledolivesthyme1.WebP") }}',
+                        '{{ asset("images/prods/pickledolivesthyme2.WebP") }}',                      
+                      ],
+                      
+                        description: 'Bright Lebanese-style chili paste made with sun-ripened peppers. Great for marinades, sandwiches, and dips.',
+                        care: [
+                          'Store in a cool, dry place',
+                          'Refrigerate after opening',
+                          'Use a clean spoon to avoid contamination'
+                        ],  
+                      url: '#' 
+                    },
+
+                     {
+                       id: 39,  
+                      name: 'Pickled Turnip', 
+                      size: '720 g',
+                      category: 'Pickles', 
+                      image: '{{ asset("images/prods/pickledturnip3.WebP") }}', 
+                      // main card image
+                      // NEW: detail fields
+                       images: [
+                        '{{ asset("images/prods/pickledturnip3.WebP") }}',
+                        '{{ asset("images/prods/pickledturnip4.WebP") }}',                      
+                      ],
+                      
+                        description: 'Bright Lebanese-style chili paste made with sun-ripened peppers. Great for marinades, sandwiches, and dips.',
+                        care: [
+                          'Store in a cool, dry place',
+                          'Refrigerate after opening',
+                          'Use a clean spoon to avoid contamination'
+                        ],  
+                      url: '#' 
+                    },
+
+                    { 
+                      id: 40, 
+                      name: 'Natural Olive Oil Soap',  
+                      size: '150 g', 
+                      category: 'Natural Olive Oil Soap', 
+                      image: '{{ asset("images/prods/oliveoilsoap3.WebP") }}', 
+                      // main card image
+                      // NEW: detail fields
+                       images: [
+                        '{{ asset("images/prods/oliveoilsoap3.WebP") }}',
+                        '{{ asset("images/prods/oliveoilsoap4.WebP") }}',                      
+                      ],
+                      
+                        description: 'Bright Lebanese-style chili paste made with sun-ripened peppers. Great for marinades, sandwiches, and dips.',
+                        care: [
+                          'Store in a cool, dry place',
+                          'Refrigerate after opening',
+                          'Use a clean spoon to avoid contamination'
+                        ], 
+                      url: '#' 
+                    },
+
+                    {
+                       id: 41,  
+                      name: 'Pickled Thyme',  
+                      size: '720 g',  
+                      category: 'Pickles', 
+                       image: '{{ asset("images/prods/pickledthyme1.WebP") }}', 
+                      // main card image
+                      // NEW: detail fields
+                       images: [
+                        '{{ asset("images/prods/pickledthyme1.WebP") }}',
+                        '{{ asset("images/prods/pickledthyme2.WebP") }}',                      
+                      ],
+                      
+                        description: 'Bright Lebanese-style chili paste made with sun-ripened peppers. Great for marinades, sandwiches, and dips.',
+                        care: [
+                          'Store in a cool, dry place',
+                          'Refrigerate after opening',
+                          'Use a clean spoon to avoid contamination'
+                        ], 
+                      url: '#' 
+                    }
+
+                ],
+                get filtered() {
+                    let out = this.products
+                        .filter(p => (this.category === 'all' || p.category === this.category))
+                        .filter(p => p.name.toLowerCase().includes(this.query.trim().toLowerCase()));
+                    if (this.sort === 'az') out.sort((a, b) => a.name.localeCompare(b.name));
+                    if (this.sort === 'za') out.sort((a, b) => b.name.localeCompare(a.name));
+                    return out;
+                }
+            }
+        }
+    </script>
+</main>
+<script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+<script type="module" src="/src/main.js"></script>
+<footer class="bg-gray-50 pt-16 pb-8">
+  <div class="max-w-screen-xl mx-auto px-6 md:px-10 lg:px-20 space-y-12">
+    
+    <!-- Top Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
+
+      <!-- 1. Logo + Description -->
+     <div class="text-center lg:text-left space-y-2">
+  <img src="/images/logo.png" alt="RAAD logo" class="h-10 mx-auto lg:mx-0 hidden md:block">
+  <p class="text-gray-600 text-sm leading-relaxed">
+    From Lebanon’s olive groves to your table.<br>
+    Crafting quality since 1966.
+  </p>
+</div>
+
+      <!-- 2. Quick Links -->
+      <div class="text-center md:text-left">
+        <h3 class="text-gray-900 font-semibold mb-4 text-base">Quick Links</h3>
+        <ul class="space-y-2 text-sm text-gray-600">
+          <li><a href="/index.html" class="hover:text-yellow-600 transition-colors">Home</a></li>
+          <li><a href="/products.html" class="hover:text-yellow-600 transition-colors">Products</a></li>
+          <li><a href="/contact.html" class="hover:text-yellow-600 transition-colors">Contact Us</a></li>
+          <li><a href="#" class="hover:text-yellow-600 transition-colors">Catalog</a></li>
+        </ul>
+      </div>
+
+     <!-- 3 & 4. Contact Info -->
+<div class="md:col-span-2 text-center md:text-left">
+  <h3 class="text-gray-900 font-semibold text-center mb-6 text-base">
+    Contact Information
+  </h3>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm text-gray-600 leading-relaxed">
+    
+    <!-- Company 1 -->
+    <div>
+      <strong class="text-gray-700 uppercase tracking-wide text-xs font-semibold block mb-2">
+        Jean Raad For Industries & Trade
+      </strong>
+      Daher El Ain, Koura, North Lebanon<br>
+      T: +961 6 416 716 | +961 6 415 759<br>
+      F: Ext. 18<br>
+      E:
+      <a href="mailto:jean.raad@raadoil.com" class="text-yellow-600 hover:underline">
+        jean.raad@raadoil.com
+      </a>
+    </div>
+
+    <!-- Company 2 -->
+    <div>
+      <strong class="text-gray-700 uppercase tracking-wide text-xs font-semibold block mb-2">
+        RAAD ENTERPRISES PTY LTD
+      </strong>
+      PO Box 1076 Maroubra NSW 2035<br>
+      Sydney, Australia<br>
+      T: 0418 465 871 | 0412 889 249
+    </div>
+
+  </div>
+</div>
+
+    </div>
+
+    <!-- Divider -->
+    <div class="border-t border-gray-200"></div>
+
+    <!-- Bottom: Social + Copyright -->
+    <div class="text-center space-y-4">
+      
+      <!-- Social Icons -->
+      <div class="flex justify-center space-x-4">
+        <a href="https://www.facebook.com/share/1ECNiEaWkZ/" aria-label="Facebook" target="_blank" rel="noopener noreferrer" class="w-9 h-9 flex items-center justify-center rounded-full bg-gray-200 hover:bg-yellow-600 transition group">
+          <i class="fab fa-facebook-f text-gray-600 group-hover:text-white text-sm"></i>
+        </a>
+        <a href="https://www.instagram.com/raadoil_lb?igsh=Y2c2N3Rrd29qYXRn" aria-label="Instagram" target="_blank" rel="noopener noreferrer" class="w-9 h-9 flex items-center justify-center rounded-full bg-gray-200 hover:bg-yellow-600 transition group">
+          <i class="fab fa-instagram text-gray-600 group-hover:text-white text-sm"></i>
+        </a>
+        <a href="https://www.tiktok.com/@raadoil?_t=ZS-8ykxUvoXfQf&_r=1" aria-label="TikTok" target="_blank" rel="noopener noreferrer" class="w-9 h-9 flex items-center justify-center rounded-full bg-gray-200 hover:bg-yellow-600 transition group">
+          <i class="fab fa-tiktok text-gray-600 group-hover:text-white text-sm"></i>
+        </a>
+         <a href="https://maps.app.goo.gl/zpnpHGAjWgrZy3Cx7?g_st=ac"
+     target="_blank"
+     rel="noopener noreferrer"
+     aria-label="Location"
+     class="w-9 h-9 flex items-center justify-center rounded-full bg-gray-200 hover:bg-yellow-600 transition group">
+    <i class="fas fa-map-marker-alt text-gray-600 group-hover:text-white text-sm"></i>
+  </a>
+      </div>
+      <!-- Copyright -->
+      <p class="text-sm text-gray-500 ">&copy; 2025 RAAD. All rights reserved.</p>
+      <!-- Developer Credit -->
+  <p class="text-xs text-gray-400">
+    Developed by 
+    <a href="https://www.linkedin.com/in/helena-salim-425674275" target="_blank" rel="noopener noreferrer" class="text-yellow-600 hover:underline">
+      Helena Salim
+    </a>
+  </p>
+    </div>
+
+  </div>
+</footer>
+</body>
+</html>
